@@ -1,20 +1,22 @@
 FROM ubuntu:20.04
 
+ENV CROCO_DIR /opt/croco
+ENV CROCO_VERSION 1.1
+
 RUN DEBIAN_FRONTEND=noninteractive apt-get update \ 
     && apt-get install -y --fix-missing --no-install-recommends \ 
         make wget gcc gfortran libnetcdf-dev libnetcdff-dev
 
-RUN wget ftp://ftp.ifremer.fr/ifremer/croco/CODE_ARCHIVE/croco-v1.1.tar.gz \
-    && wget ftp://ftp.ifremer.fr/ifremer/croco/CODE_ARCHIVE/croco_tools-v1.1.tar.gz \
-    && tar -zxvf croco_tools-v1.1.tar.gz \
-    && tar -zxvf croco-v1.1.tar.gz \
-    && mkdir croco CONFIGS \
-    && mv croco-v1.1 croco/croco && mv croco_tools-v1.1 croco/croco_tools \
-    && rm -rf croco-v1.1.tar.gz croco_tools-v1.1.tar.gz 
+RUN mkdir -p $CROCO_DIR \
+    && cd $CROCO_DIR \
+    && wget ftp://ftp.ifremer.fr/ifremer/croco/CODE_ARCHIVE/croco-v${CROCO_VERSION}.tar.gz \
+    && wget ftp://ftp.ifremer.fr/ifremer/croco/CODE_ARCHIVE/croco_tools-v${CROCO_VERSION}.tar.gz \
+    && tar -zxvf croco_tools-v${CROCO_VERSION}.tar.gz \
+    && tar -zxvf croco-v${CROCO_VERSION}.tar.gz \
+    && mkdir CONFIGS \
+    && mv croco-v${CROCO_VERSION} croco && mv croco_tools-v${CROCO_VERSION} croco_tools \
+    && rm -rf croco-v${CROCO_VERSION}.tar.gz croco_tools-v${CROCO_VERSION}.tar.gz 
 
-WORKDIR croco
+WORKDIR $CROCO_DIR
 
-RUN cd croco \
-    && ls && ./create_run.bash \
-    && cd .. \
-    && mv Run_BENGUELA_LR Run
+ADD create_run.bash create_run.bash
