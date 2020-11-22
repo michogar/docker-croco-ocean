@@ -1,7 +1,15 @@
 # Docker CROCO-OCEAN
 
-## How to run
+## Build the image
 
+```bash
+./build.sh
 ```
-docker run  --name croco-ocean -v ~/michogarcia:/Run/CROCO_FILES -it --entrypoint /bin/bash croco-ocean
+
+## Start the image
+
+There is a script which runs the docker creating the CONFIG folder needed named as param passed to the script
+
+```bash
+./run.sh LR_BENGUELA
 ```
